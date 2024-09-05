@@ -53,7 +53,6 @@ router.post('/', verifyToken, async (req, res, next) => {
         user.createdBy = req.userId;
         user.updatedAt = new Date();
         user.updatedBy = req.userId;
-
         const saved = await user.save();
         res.status(201).json(saved);
     } catch (err) {
@@ -79,7 +78,6 @@ router.put('/:id', verifyToken, async (req, res, next) => {
         user.expiryDate = req.body.expiryDate;
         user.updatedAt = new Date();
         user.updatedBy = req.userId;
-
         const saved = await user.save();
         res.status(200).json(saved);
     } catch (err) {

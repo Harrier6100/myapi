@@ -16,15 +16,15 @@ router.post('/signin', async (req, res, next) => {
 
     try {
         const user = await Users.findOne({ code: id });
-        if (!user) return res.status(401).send('IDまたはパスワードが無効です');
+        if (!user) return res.status(401).send('IDまたはパスワードが無効です。');
         
         const match = await bcrypt.compare(password, user.password);
-        if (!match) return res.status(401).send('IDまたはパスワードが無効です');
+        if (!match) return res.status(401).send('IDまたはパスワードが無効です。');
 
         const today = moment().startOf('day');
         const expiryDate = user.expiryDate ? moment(user.expiryDate).startOf('day') : null;
         if (expiryDate && expiryDate.isBefore(today)) {
-            return res.status(401).send('アカウントの有効期限が切れています');
+            return res.status(401).send('アカウントの有効期限が切れています。');
         }
 
         const tokens = {
@@ -55,12 +55,12 @@ router.post('/refresh', async (req, res, next) => {
         });
 
         const user = await Users.findOne({ code: decoded.userId });
-        if (!user) return res.status(401).send('アカウントが存在しません');
+        if (!user) return res.status(401).send('アカウントが存在しません。');
 
         const today = moment().startOf('day');
         const expiryDate = user.expiryDate ? moment(user.expiryDate).startOf('day') : null;
         if (expiryDate && expiryDate.isBefore(today)) {
-            return res.status(401).send('アカウントの有効期限が切れています');
+            return res.status(401).send('アカウントの有効期限が切れています。');
         }
 
         const tokens = {
@@ -71,7 +71,7 @@ router.post('/refresh', async (req, res, next) => {
         res.status(200).json(tokens);
     } catch (err) {
         if (err.name === 'TokenExpiredError') {
-            return res.status(401).send('トークンが無効です');
+            return res.status(401).send('トークンが無効です。');
         }
         next(err);
     }

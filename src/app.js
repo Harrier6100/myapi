@@ -5,10 +5,10 @@ const app = express();
 const compression = require('compression');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const cacheControl = require('@/middlewares/cacheControl');
-const accessLogger = require('@/middlewares/accessLogger');
-const errorHandler = require('@/middlewares/errorHandler');
-const errorLogger = require('@/middlewares/errorLogger');
+const cacheControl = require('./middlewares/cacheControl');
+const accessLogger = require('./middlewares/accessLogger');
+const errorHandler = require('./middlewares/errorHandler');
+const errorLogger = require('./middlewares/errorLogger');
 
 mongoose.set('strictQuery', false);
 mongoose.connect(process.env.MONGODB);
