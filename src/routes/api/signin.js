@@ -17,7 +17,7 @@ router.post('/signin', async (req, res, next) => {
     try {
         const user = await Users.findOne({ code: id });
         if (!user) return res.status(401).send('IDまたはパスワードが無効です。');
-        
+
         const match = await bcrypt.compare(password, user.password);
         if (!match) return res.status(401).send('IDまたはパスワードが無効です。');
 
@@ -28,7 +28,8 @@ router.post('/signin', async (req, res, next) => {
         }
 
         const tokens = {
-            token: jwt.sign({ userId: user.code, userName: user.name }, secretKey, { expiresIn: '1h' }),
+            user: { userId: user.code, userName: user.name },
+            token: jwt.sign({ userId: user.code }, secretKey, { expiresIn: '1h' }),
             refreshToken: jwt.sign({ userId: user.code }, refreshSecretKey, { expiresIn: '7d' }),
         };
 
@@ -64,9 +65,10 @@ router.post('/refresh', async (req, res, next) => {
         }
 
         const tokens = {
-            token: jwt.sign({ userId: user.code, userName: user.name }, secretKey, { expiresIn: '1h' }),
+            user: { userId: user.code, userName: user.name },
+            token: jwt.sign({ userId: user.code }, secretKey, { expiresIn: '1h' }),
             refreshToken: jwt.sign({ userId: user.code }, refreshSecretKey, { expiresIn: '7d' }),
-        }
+        };
 
         res.status(200).json(tokens);
     } catch (err) {

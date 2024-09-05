@@ -6,6 +6,11 @@ router.use(
     require('./api/signin')
 );
 
+/** マイアカウント */
+router.use('/me',
+    require('./api/me')
+);
+
 /** アカウント */
 router.use('/users',
     require('./api/user')

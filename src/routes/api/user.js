@@ -69,17 +69,30 @@ router.put('/:id', verifyToken, async (req, res, next) => {
     const { id } = req.params;
 
     try {
-        const user = await Users.findById(id)
-        if (!user) return res.status(404).send();
-
-        user.code = req.body.code;
-        user.name = req.body.name;
-        user.email = req.body.email;
-        user.expiryDate = req.body.expiryDate;
-        user.updatedAt = new Date();
-        user.updatedBy = req.userId;
-        const saved = await user.save();
-        res.status(200).json(saved);
+        const user = await Users.findById(id);
+        if (user) {
+            user.code = req.body.code;
+            user.name = req.body.name;
+            user.email = req.body.email;
+            user.expiryDate = req.body.expiryDate;
+            user.updatedAt = new Date();
+            user.updatedBy = req.userId;
+            const saved = await user.save();
+            res.status(200).json(saved);
+        } else {
+            const user = new Users();
+            user._id = id;
+            user.code = req.body.code;
+            user.name = req.body.name;
+            user.email = req.body.email;
+            user.expiryDate = req.body.expiryDate;
+            user.createdAt = new Date();
+            user.createdBy = req.userId;
+            user.updatedAt = new Date();
+            user.updatedBy = req.userId;
+            const saved = await user.save();
+            res.status(201).json(saved);
+        }
     } catch (err) {
         next(err);
     }
