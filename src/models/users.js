@@ -8,10 +8,10 @@ const users = new Schema({
     email: String,
     password: String,
     expiryDate: Date,
-    createdAt: Date,
     createdBy: String,
-    updatedAt: Date,
+    createdAt: Date,
     updatedBy: String,
+    updatedAt: Date,
 }, { versionKey: false });
 
 users.index({

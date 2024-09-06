@@ -5,7 +5,7 @@ const verifyToken = require('@/middlewares/verifyToken');
 const Users = require('@/models/users');
 
 /**
- * アカウント全件取得
+ * アカウント
  */
 router.get('/', async (req, res, next) => {
 
@@ -40,19 +40,17 @@ router.get('/:id', async (req, res, next) => {
  */
 router.post('/', verifyToken, async (req, res, next) => {
 
-    const password = await bcrypt.hash(req.body.code, 10);
-
     try {
         const user = new Users();
         user.code = req.body.code;
         user.name = req.body.name;
         user.email = req.body.email;
-        user.password = password;
+        user.password = await bcrypt.hash(req.body.code, 10);
         user.expiryDate = req.body.expiryDate;
-        user.createdAt = new Date();
         user.createdBy = req.userId;
-        user.updatedAt = new Date();
+        user.createdAt = new Date();
         user.updatedBy = req.userId;
+        user.updatedAt = new Date();
         const saved = await user.save();
         res.status(201).json(saved);
     } catch (err) {
@@ -75,8 +73,8 @@ router.put('/:id', verifyToken, async (req, res, next) => {
             user.name = req.body.name;
             user.email = req.body.email;
             user.expiryDate = req.body.expiryDate;
-            user.updatedAt = new Date();
             user.updatedBy = req.userId;
+            user.updatedAt = new Date();
             const saved = await user.save();
             res.status(200).json(saved);
         } else {
@@ -86,10 +84,10 @@ router.put('/:id', verifyToken, async (req, res, next) => {
             user.name = req.body.name;
             user.email = req.body.email;
             user.expiryDate = req.body.expiryDate;
-            user.createdAt = new Date();
             user.createdBy = req.userId;
-            user.updatedAt = new Date();
+            user.createdAt = new Date();
             user.updatedBy = req.userId;
+            user.updatedAt = new Date();
             const saved = await user.save();
             res.status(201).json(saved);
         }
